@@ -263,5 +263,36 @@ def greeting(planet):
 </html>'''.format(planet.capitalize(), *lines)
 
 
+@app.route('/results/<nickname>/<int:level>/<float:rating>')
+def results(nickname, level, rating):
+    return '''
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Результаты отбора</h1>
+    <h2>Претендента на участие в миссии {}:</h2>
+    
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+          <div style="font-size: 25px;">
+            Поздравляем! Ваш рейтинг после {} этапа отбора
+          </div>
+        </div>
+    <h3>составляет {}!</h3>
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <div style="font-size: 25px;">
+            Желаем удачи!
+        </div>
+    </div>
+
+</body>
+</html>'''.format(nickname.capitalize(), level, rating)
+
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
