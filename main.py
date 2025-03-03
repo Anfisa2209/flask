@@ -224,5 +224,44 @@ def form_sample():
         return "Форма отправлена"
 
 
+@app.route('/choice/<planet>')
+def greeting(planet):
+    if planet in ('земля', "earth"):
+        lines = ["Мы живем на этой планете!", "На ней много необходимых ресурсов", "На ней есть вода и атмосфера",
+                 "На ней нет инопланетян", "Наконец, она просто красива!"]
+    else:
+        lines = ["Эта планет близка к Земле;", "На ней много необходимых ресурсов", "На ней есть вода и атмосфера",
+                 "На ней есть небольшое магнитное поле", "Наконец, она просто красива!"]
+    return '''
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Варианты выбора</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Мое предложение: {}!</h1>
+    <div class="alert alert-primary" role="alert">
+        <h3>{}</h3>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+      <h3>{}</h3>
+    </div>
+    <div class="alert alert-success" role="alert">
+      <h3>{}</h3>
+    </div>
+    <div class="alert alert-danger" role="alert">
+      <h3>{}</h3>
+    </div>
+    <div class="alert alert-warning" role="alert">
+      <h3>{}</h3>
+    </div>
+
+</body>
+</html>'''.format(planet.capitalize(), *lines)
+
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
