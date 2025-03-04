@@ -1,3 +1,5 @@
+import os.path
+
 from flask import Flask, url_for, request
 
 app = Flask(__name__)
@@ -347,6 +349,68 @@ def carousel():
     </div>
     </body>
     </html>"""
+
+
+@app.route('/upload_photo', methods=['POST', 'GET'])
+def sample_file_upload():
+    if os.path.exists('static/img/image.png'):
+        return f'''<!doctype html>
+                        <html lang="en">
+                          <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                             <link rel="stylesheet" type="text/css" href="{url_for('static', filename='/css/style.css')}"/>
+                             <link rel="stylesheet"
+                             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                             integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                             crossorigin="anonymous">
+                            <title>Загрузка файла</title>
+                          </head>
+                          <body>
+                            <h1>Загрузка фотографии</h1>
+                            <h2> для участия в миссии</h2>
+                            <form class="form_group" method="post" enctype="multipart/form-data">
+                                <div class="form_group">
+                                    <label for="photo">Приложите файл</label><br>
+                                    <input type="file" class="form-control-file" id="photo" name="file" style="font-size:20px">
+                                </div>
+                                <br>
+                                <br>
+                                <img src="static/img/image.png" class="img-thumbnail"  alt="ваше фото"><br>
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                          </body>
+                        </html>'''
+    if request.method == 'GET':
+        return f'''<!doctype html>
+                        <html lang="en">
+                          <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                             <link rel="stylesheet" type="text/css" href="{url_for('static', filename='/css/style.css')}"/>
+                             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                             integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                             crossorigin="anonymous">
+                            <title>Загрузка файла</title>
+                          </head>
+                          <body>
+                            <h1>Загрузка фотографии</h1>
+                            <h2> для участия в миссии</h2>
+                            <form class="form_group" method="post" enctype="multipart/form-data">
+                                <div class="form_group">
+                                    <label for="photo">Приложите файл</label><br>
+                                    <input type="file" class="form-control-file" id="photo" name="file" style="font-size:20px">
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                          </body>
+                        </html>'''
+    elif request.method == 'POST':
+        f = request.files['file']
+        with open('static/img/image.png', 'wb') as image_file:
+            image_file.write(f.read())
+        return "Форма отправлена"
 
 
 if __name__ == '__main__':
