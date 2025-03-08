@@ -9,15 +9,18 @@ def index(title):
     return render_template('base.html', title=title)
 
 
-@app.route('/training/<prof>')
-def training(prof):
-    return render_template('training.html', prof=prof)
-
-
-@app.route('/list_prof/<lst>')
-def list_prof(lst):
-    professions = ['инженер', 'врач', 'строитель', 'пилот', 'штурман']
-    return render_template('list_prof.html', list=lst, professions=professions)
+@app.route('/answer')
+@app.route('/auto_answer')
+def auto_answer():
+    data = {'title': 'Анкета',
+            'surname': "Watny",
+            'name': "Mark",
+            'education': "выше среднего",
+            'profession': "штурман марсхода",
+            'sex': "male",
+            'motivation': "всегда мечтал застрять на Марсе!",
+            'ready': 'True'}
+    return render_template('auto_answer.html', **data)
 
 
 if __name__ == '__main__':
