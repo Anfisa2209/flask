@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <meta charset="utf-8">
+  <h1>Размещение по каютам</h1>
+  {% set user_list = ['Ваня', 'Петя', 'Саша', 'Кирилл'] %}
+  {% set cabin = 'Каюта №' %}
+  {% for user in user_list %}
+    {{ user }} - {{ cabin }}{{ loop.index }}{% if loop.first %} - капитан корабля{% endif %}
+    <br>
+  {% endfor %}
+{% endblock %}
