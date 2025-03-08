@@ -22,6 +22,11 @@ def index(title):
     return render_template('base.html', title=title)
 
 
+@app.route('/table/<string:sex>/<int:age>')
+def table(sex, age):
+    return render_template('table.html', sex=sex, age=age)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -34,9 +39,11 @@ def login():
 def success():
     return render_template('success.html', title='Успех')
 
+
 @app.route('/distribution')
 def distribution():
     return render_template('distribution.html')
+
+
 if __name__ == '__main__':
     app.run(port=8080, host='127.0.0.1')
-

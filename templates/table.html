@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="utf-8">
+<table class="table table-striped table-bordered">
+    <tr>
+        <th style="text-align: center;">Цвет стен</th>
+        <th style="text-align: center;">Симбионт</th>
+    </tr>
+    <tr>
+        <td>
+            {% set color = 100 - age %}
+            <div class="color-block" style="background-color:
+                    {% if sex == 'female' %}
+                        hwb(354 {{color}}% 0%);
+                    {% else %}
+                        hwb(244 {{color}}% 0%);
+                    {% endif %};"></div>
+        </td>
+        <td >
+            {% if age >= 21 %}
+            <img src="/static/img/adult.png" alt="Взрослый марсианин">
+            {% else %}
+            <img src="/static/img/young.png" alt="Маленький марсианин">
+            {% endif %}
+        </td>
+    </tr>
+
+</table>
+{% endblock %}
