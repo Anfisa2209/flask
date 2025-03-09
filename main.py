@@ -1,4 +1,6 @@
-from flask import Flask, render_template, redirect
+import os
+
+from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
@@ -43,6 +45,31 @@ def success():
 @app.route('/distribution')
 def distribution():
     return render_template('distribution.html')
+
+
+@app.route('/gallery', methods=['POST', 'GET'])
+def gallery():
+    if request.method == 'GET':
+        image_list = return_files('static/img/mars_img')
+        return render_template('gallery.html', image_list=image_list)
+
+    elif request.method == 'POST':
+        f = request.files['file']
+
+        number = len(return_files('static/img/mars_img')) + 1
+        with open(f'static/img/mars_img/mars{number}.png', 'wb') as image_file:
+            image_file.write(f.read())
+
+        image_list = return_files('static/img/mars_img')
+        return render_template('gallery.html', image_list=image_list)
+
+
+def return_files(path):
+    file_list = []
+    for currentdir, dirs, files in os.walk(path):
+        for file in files:
+            file_list.append(f'{path}/{file}')
+    return file_list
 
 
 if __name__ == '__main__':

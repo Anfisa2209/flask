@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="utf-8">
+     <h1>Пейзажи Марса</h1>
+     <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+            {% for img in image_list %}
+                   <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index }}" class="active"
+                    aria-current="true" aria-label="Slide {{ loop.index }}"></button>
+                {% endfor %}
+        </div>
+        <div class="carousel-inner" >
+                {% for img in image_list %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ img }}" class="d-block w-100" alt="Картинка с Марса">
+                    </div>
+                {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <form class="form_group" method="post" enctype="multipart/form-data">
+        <div class="form_group">
+            <label for="photo">Приложите файл</label><br>
+            <input type="file" class="form-control-file" id="photo" name="file" style="font-size:20px">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+{% endblock %}
