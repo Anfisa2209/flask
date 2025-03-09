@@ -1,4 +1,6 @@
+import json
 import os
+import random
 
 from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
@@ -70,6 +72,14 @@ def return_files(path):
         for file in files:
             file_list.append(f'{path}/{file}')
     return file_list
+
+
+@app.route('/member')
+def random_member():
+    with open('templates/crew_members.json', encoding='utf8') as json_file:
+        data = json.load(json_file)
+    member = random.choice(data)
+    return render_template('member.html', member=member)
 
 
 if __name__ == '__main__':

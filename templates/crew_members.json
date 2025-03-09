@@ -1,0 +1,14 @@
+[
+    {
+        "first_name": "Энди",
+        "last_name": "Уир",
+        "img": "/static/img/crew_img/andy.png",
+        "profession": ["астрогеолог", "специалист по радиационной защите"]
+    },
+    {
+        "first_name": "Марк",
+        "last_name": "Уотни",
+        "img": "/static/img/crew_img/mark.png",
+        "profession": ["Штурман марсохода"]
+    }
+]

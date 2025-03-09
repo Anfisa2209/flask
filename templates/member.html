@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="utf-8">
+     <h1>{{member["first_name"]}} {{member["last_name"]}}</h1>
+     <br>
+     <div class="d-flex justify-content-center">
+          <img src="{{ member['img']}}" alt="Фото {{member['first_name']}} {{member['last_name']}}">
+       </div>
+     {% set prof = member['profession'] | sort | join(', ') %}
+     <br>
+     <br>
+     <br>
+     <p style="text-align:center;">{{ prof }}</p>
+
+
+{% endblock %}
