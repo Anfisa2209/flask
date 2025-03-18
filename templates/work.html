@@ -1,0 +1,30 @@
+{% extends "base.html"%}
+
+{% block content %}
+  <meta charset="utf-8">
+    <h1>Works Log</h1>
+    {% for job in jobs%}
+          <h3>Action # {{job.id}}</h3>
+          <table class="table table-striped table-bordered">
+          <tr class="table-secondary">
+              {% for caption in captions%}
+                    <th style="text-align: center;">{{caption}}</th>
+              {% endfor%}
+          </tr>
+          <tr style="max-height: 100px">
+              {% if job.is_finished %}
+                 {% set is_finished = "Is finished" %}
+              {% else %}
+                 {% set is_finished = "Is not finished" %}
+              {% endif %}
+              <td class="table-primary">{{ job.job }}</td>
+              <td class="table-primary">{{ team_leaders[loop.index - 1] }}</td>
+              <td class="table-primary">{{ job.work_size }} hours</td>
+              <td class="table-primary">{{ job.collaborators }}</td>
+              <td class="table-danger">{{ is_finished }}</td>
+          </tr>
+          </table>
+    {% endfor%}
+
+
+{% endblock %}

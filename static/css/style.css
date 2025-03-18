@@ -15,13 +15,7 @@ h1, h2 {
 .color-block {
         width: 100%;
         height: 100%; }
-.table {
-        width: 100%;
-        table-layout: fixed;
-    }
-.table td {
-        height: 700px;
-    }
+
 td img{
     width: 100%;
     height: 100%;

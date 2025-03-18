@@ -7,6 +7,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
+from SQL.data.db_session import global_init, create_session
+from SQL.data.jobs import Jobs
+from SQL.data.users import User
+
 
 class LoginForm(FlaskForm):
     astronaut_id = StringField('ID астронавта', validators=[DataRequired()])
@@ -80,6 +84,17 @@ def random_member():
         data = json.load(json_file)
     member = random.choice(data)
     return render_template('member.html', member=member)
+
+
+@app.route('/')
+def works_log():
+    global_init('SQL/db/mars.db')
+    session = create_session()
+    jobs = session.query(Jobs)
+    captions = ['Title of activity', 'Team leader', 'Duration', 'List of collaborators', 'Is finished']
+    team_leaders = [f"{user.name} {user.surname}" for job in jobs
+                    for user in session.query(User).filter(User.id == job.team_leader)]
+    return render_template('work.html', jobs=jobs, captions=captions, team_leaders=team_leaders)
 
 
 if __name__ == '__main__':
