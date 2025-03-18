@@ -4,7 +4,7 @@ import random
 
 from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, IntegerField
 from wtforms.validators import DataRequired
 
 from SQL.data.db_session import global_init, create_session
@@ -18,6 +18,19 @@ class LoginForm(FlaskForm):
     cap_id = StringField('ID капитана', validators=[DataRequired()])
     cap_password = PasswordField('Пароль капитана', validators=[DataRequired()])
     submit = SubmitField('Доступ')
+
+
+class RegisterForm(FlaskForm):
+    email = EmailField('Login / email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password_again = PasswordField('Repeat password', validators=[DataRequired()])
+    surname = StringField('Surname', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    age = IntegerField('Age', validators=[DataRequired()])
+    position = StringField('position', validators=[DataRequired()])
+    speciality = StringField('speciality', validators=[DataRequired()])
+    address = StringField('address', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 
 app = Flask(__name__)
@@ -45,7 +58,7 @@ def login():
 
 @app.route('/success')
 def success():
-    return render_template('success.html', title='Успех')
+    return render_template('success.html', title='Успех', content='Доступ разрешен, добро пожаловать на корабль')
 
 
 @app.route('/distribution')
@@ -95,6 +108,45 @@ def works_log():
     team_leaders = [f"{user.name} {user.surname}" for job in jobs
                     for user in session.query(User).filter(User.id == job.team_leader)]
     return render_template('work.html', jobs=jobs, captions=captions, team_leaders=team_leaders)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        global_init('SQL/db/mars.db')
+        db_sess = create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        if form.age.data < 0:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Возраст не может быть отрицательным!")
+        user = User(
+            surname=form.surname.data,
+            name=form.name.data,
+            age=form.age.data,
+            position=form.position.data,
+            speciality=form.speciality.data,
+            address=form.address.data,
+            email=form.email.data
+        )
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/successful_login')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/successful_login')
+def successful_login():
+    return render_template('success.html', title='Успех', content='Вы успешно зарегистрированы')
 
 
 if __name__ == '__main__':
