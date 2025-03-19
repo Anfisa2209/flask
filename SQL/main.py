@@ -1,9 +1,11 @@
 import datetime
 
 from flask import Flask
+
 from data import db_session
-from data.users import User
+from data.department import Department
 from data.jobs import Jobs
+from data.users import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -77,7 +79,15 @@ def main():
     job.is_finished = False
     session.add(job)
     session.commit()
-    # app.run()
+
+    dep = Department()
+    dep.title = 'Геологическая разведка'
+    dep.chief = 1
+    dep.members = '1, 2, 3'
+    dep.email = 'scott_chief@mars.org'
+
+    session.add(dep)
+    session.commit()
 
 
 if __name__ == '__main__':
