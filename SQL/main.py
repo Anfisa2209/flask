@@ -2,7 +2,7 @@ import datetime
 
 from flask import Flask
 
-from data import db_session
+from data.db_session import global_init, create_session
 from data.department import Department
 from data.jobs import Jobs
 from data.users import User
@@ -12,8 +12,10 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
 def main():
-    db_session.global_init("db/mars.db")
-    session = db_session.create_session()
+    # db/mars.db
+    global_init('db/mars.db')
+    session = create_session()
+
 
     user = User()
     user.surname = "Scott"

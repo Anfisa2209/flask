@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Добавить работу</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.job.label }}<br>
+            {{ form.job(class="form-control") }}<br>
+            {% for error in form.job.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.team_leader.label }}<br>
+            {{ form.team_leader(class="form-control") }}<br>
+            {% for error in form.team_leader.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.duration.label }}<br>
+            {{ form.duration(class="form-control") }}<br>
+            {% for error in form.duration.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+         <p>
+            {{ form.collaborators.label }}<br>
+            {{ form.collaborators(class="form-control") }}<br>
+            {% for error in form.collaborators.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>{{ form.is_finished() }} {{ form.is_finished.label }}</p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        <div>{{ message }}</div>
+    </form>
+{% endblock %}
