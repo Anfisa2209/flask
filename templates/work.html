@@ -21,7 +21,11 @@
               <td class="table-primary">{{ team_leaders[loop.index - 1] }}</td>
               <td class="table-primary">{{ job.work_size }} hours</td>
               <td class="table-primary">{{ job.collaborators }}</td>
-              <td class="table-danger">{{ is_finished }}</td>
+              {% if is_finished == "Is finished" %}
+                    <td class="table-success">{{ is_finished }}</td>
+              {% else%}
+                    <td class="table-danger">{{ is_finished }}</td>
+              {% endif %}
           </tr>
           </table>
         {% if current_user.is_authenticated and (current_user == job.user or current_user.id == 1)%}
