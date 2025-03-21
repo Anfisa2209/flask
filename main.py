@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask import Flask, render_template, redirect, request, abort
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from SQL.data import db_session
 from SQL.data.job_form import JobForm
@@ -83,6 +83,7 @@ def works_log():
 
 
 @app.route("/addjob", methods=['GET', 'POST'])
+@login_required
 def add_job():
     form = JobForm()
     if form.validate_on_submit():
@@ -96,7 +97,55 @@ def add_job():
         db_sess.add(job)
         db_sess.commit()
         return redirect('/')
-    return render_template('addjob.html', title='Регистрация', form=form)
+    return render_template('addjob.html', title='Добавить работу', form=form)
+
+
+@app.route('/jobs/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_jobs(id):
+    form = JobForm()
+    db_sess = db_session.create_session()
+    job = db_sess.query(Jobs).filter(Jobs.id == id, (Jobs.user == current_user) | (current_user.id == 1)).first()
+
+    if not job:
+        abort(404)
+    if request.method == "GET":
+        form.job.data = job.job
+        form.duration.data = job.work_size
+        form.collaborators.data = job.collaborators
+        form.team_leader.data = job.team_leader
+        form.is_finished.data = job.is_finished
+
+    if form.validate_on_submit():
+        job.job = form.job.data
+        job.work_size = form.duration.data
+        job.collaborators = form.collaborators.data
+        job.team_leader = form.team_leader.data
+        job.is_finished = form.is_finished.data
+
+        db_sess.commit()
+        return redirect('/')
+
+    return render_template(
+        'addjob.html',
+        title='Редактирование работы',
+        form=form
+    )
+
+
+@app.route('/job_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(id):
+    db_sess = db_session.create_session()
+    news = db_sess.query(Jobs).filter(Jobs.id == id,
+                                      (Jobs.user == current_user) | (current_user.id == 1)
+                                      ).first()
+    if news:
+        db_sess.delete(news)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 
 @app.route('/logout')
