@@ -28,7 +28,7 @@
               {% endif %}
           </tr>
           </table>
-        {% if current_user.is_authenticated and (current_user == job.user or current_user.id == 1)%}
+        {% if current_user.is_authenticated and (job.team_leader == current_user.id or current_user.id == 1)%}
             <div>
                 <a href="/jobs/{{ job.id }}" class="btn btn-warning">
                     Изменить
