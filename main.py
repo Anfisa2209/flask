@@ -9,10 +9,11 @@ from SQL.data.login_form import LoginForm
 from SQL.data.register_form import RegisterForm
 from SQL.data.department_form import DepartmentForm
 from SQL.data.users import User
+from api.jobs_api import jobs_bp
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-
+app.register_blueprint(jobs_bp, url_prefix='/api')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -119,7 +120,8 @@ def edit_department(id):
     form = DepartmentForm()
     db_sess = db_session.create_session()
     department = db_sess.query(Department).filter(Department.id == id,
-                                                  (Department.chief_user == current_user) | (current_user.id == 1)).first()
+                                                  (Department.chief_user == current_user) | (
+                                                              current_user.id == 1)).first()
 
     if not department:
         abort(404)
