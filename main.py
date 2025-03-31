@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from requests import get
 
 from SQL.data import db_session
 from SQL.data.department import Department
@@ -65,7 +66,8 @@ def register():
             position=form.position.data,
             speciality=form.speciality.data,
             address=form.address.data,
-            email=form.email.data
+            email=form.email.data,
+            city_from=form.city_from.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -123,7 +125,7 @@ def edit_department(id):
     db_sess = db_session.create_session()
     department = db_sess.query(Department).filter(Department.id == id,
                                                   (Department.chief_user == current_user) | (
-                                                              current_user.id == 1)).first()
+                                                          current_user.id == 1)).first()
 
     if not department:
         abort(404)
@@ -228,6 +230,18 @@ def jobs_delete(id):
     else:
         abort(404)
     return redirect('/')
+
+
+@app.route('/users_show/<int:user_id>', methods=['GET'])
+@login_required
+def users_show(user_id):
+    if user_id != current_user.id:
+        return abort(403)
+    user_info = get(f'http://localhost:8080/api/users_show/{user_id}').json()
+    status_code = get(f'http://localhost:8080/api/users_show/{user_id}').status_code
+    if not user_info.get('users'):
+        return abort(status_code)
+    return render_template('users_show.html', user=user_info['users'][0])
 
 
 @app.route('/logout')

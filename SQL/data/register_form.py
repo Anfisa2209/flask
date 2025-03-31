@@ -14,4 +14,5 @@ class RegisterForm(FlaskForm):
     position = StringField('position', validators=[DataRequired()])
     speciality = StringField('speciality', validators=[DataRequired()])
     address = StringField('address', validators=[DataRequired()])
+    city_from = StringField('Hometown (по умолчанию - Москва)', default='Москва')
     submit = SubmitField('Submit')

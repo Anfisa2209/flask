@@ -3,6 +3,7 @@ from flask import request, make_response, jsonify
 
 from SQL.data import db_session
 from SQL.data.users import User
+from maps.utiles import get_object, get_ll_spn, get_static_api_image
 
 user_bp = flask.Blueprint('users_api', __name__)
 
@@ -95,3 +96,18 @@ def edit_one_user(user_id):
     db_sess.commit()
     return jsonify(
         {'user': user.to_dict(only=('id', 'surname', 'name', 'age', 'position', 'speciality', 'address', 'email'))})
+
+
+@user_bp.route('/users_show/<int:user_id>', methods=['GET'])
+def users_show(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    if not user:
+        return make_response(jsonify({'error': "Access denied"}), 403)
+    toponym = get_object(user.city_from)
+    ll, spn = get_ll_spn(toponym)
+    content = get_static_api_image(ll)
+    with open('static/img/map.png', mode='wb') as file:
+        file.write(content)
+    return make_response(jsonify({'users': [
+                user.to_dict(only=('surname', 'name', 'city_from'))]}))
