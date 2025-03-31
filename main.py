@@ -10,10 +10,12 @@ from SQL.data.register_form import RegisterForm
 from SQL.data.department_form import DepartmentForm
 from SQL.data.users import User
 from api.jobs_api import jobs_bp
+from api.user_api import user_bp
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.register_blueprint(jobs_bp, url_prefix='/api')
+app.register_blueprint(user_bp, url_prefix='/api')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
