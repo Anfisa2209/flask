@@ -1,22 +1,33 @@
-from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
+from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_restful import Api
 from requests import get
 
 from SQL.data import db_session
 from SQL.data.department import Department
+from SQL.data.department_form import DepartmentForm
 from SQL.data.job_form import JobForm
 from SQL.data.jobs import Jobs
 from SQL.data.login_form import LoginForm
 from SQL.data.register_form import RegisterForm
-from SQL.data.department_form import DepartmentForm
 from SQL.data.users import User
 from api.jobs_api import jobs_bp
 from api.user_api import user_bp
+from api_v2.jobs_resource import JobsResource, JobsListResource
+from api_v2.users_resource import UsersResource, UsersListResource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.register_blueprint(jobs_bp, url_prefix='/api')
 app.register_blueprint(user_bp, url_prefix='/api')
+
+api_version2 = Api(app)
+api_version2.add_resource(UsersResource, '/api/v2/users/<int:user_id>')
+api_version2.add_resource(UsersListResource, '/api/v2/users')
+
+api_version2.add_resource(JobsResource, '/api/v2/jobs/<int:job_id>')
+api_version2.add_resource(JobsListResource, '/api/v2/jobs')
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -253,4 +264,4 @@ def logout():
 
 if __name__ == '__main__':
     db_session.global_init('SQL/db/mars.db')
-    app.run(port=8080, host='127.0.0.1')
+    app.run(port=8080, host='127.0.0.1', debug=True)
