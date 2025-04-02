@@ -32,6 +32,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+@app.route('/distribution')
+def distribution():
+    user_list = ['Ваня', 'Петя', 'Саша', 'Кирилл']
+    return render_template('distribution.html', user_list=user_list)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_ses = db_session.create_session()
