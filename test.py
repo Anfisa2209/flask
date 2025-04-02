@@ -62,4 +62,29 @@ def test_api_2():
     print(delete('http://localhost:8080/api/v2/users/100').json())  # удаление несуществующего пользователя
 
 
-test_api_2()
+def test_jobs_v2():
+    print(get('http://localhost:8080/api/v2/jobs').json())  # получение всех работ
+    print(get('http://localhost:8080/api/v2/jobs/3').json())  # получение существующей работы
+    print(get('http://localhost:8080/api/v2/jobs/404').json())  # получение несуществующей работы
+
+    print(post('http://localhost:8080/api/v2/jobs', json={'job': "v2",
+                                                          'team_leader': 1,
+                                                          'work_size': 12,
+                                                          'collaborators': "1,2",
+                                                          'is_finished': False}).json())  # создание новой работы
+    print(put('http://localhost:8080/api/v2/jobs/12', json={'job': "API v2!!!!",
+                                                            'team_leader': 1,
+                                                            'work_size': 12,
+                                                            'collaborators': "1,2",
+                                                            'is_finished': True}).json())  # изменение существующей работы
+    print(put('http://localhost:8080/api/v2/jobs/404', json={'job': "API v2!!!!",
+                                                             'team_leader': 1,
+                                                             'work_size': 12,
+                                                             'collaborators': "1,2",
+                                                             'is_finished': True}).json())  # изменение несуществующей работы
+
+    print(delete('http://localhost:8080/api/v2/jobs/12').json())  # удаление существующей работы
+    print(delete('http://localhost:8080/api/v2/jobs/404').json())  # удаление несуществующей работы
+
+
+test_jobs_v2()
