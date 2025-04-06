@@ -32,10 +32,10 @@ def get_ll_spn(toponym: dict):
     return object_ll, object_spn
 
 
-def get_static_api_image(object_ll, z=5, theme='light', pt=''):
+def get_static_api_image(object_ll, z=12, theme='light', pt=''):
     map_params = {
         "ll": object_ll,
-        'apikey': "f3a0fe3a-b07e-4840-a1da-06f18b2ddf13",
+        'apikey': "66a74a17-2df9-44cc-aa42-006036c7be2b",
         'z': z,
         'theme': theme,
         'pt': pt
@@ -50,7 +50,7 @@ def get_static_api_image(object_ll, z=5, theme='light', pt=''):
     if response:
         return response.content
     else:
-        raise RuntimeError('Ошибка выполнения запроса.')
+        return None
 
 
 def show_image(content):

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import Api
 from requests import get
@@ -248,11 +248,14 @@ def jobs_delete(id):
 def users_show(user_id):
     if user_id != current_user.id:
         return abort(403)
-    user_info = get(f'http://localhost:8080/api/users_show/{user_id}').json()
-    status_code = get(f'http://localhost:8080/api/users_show/{user_id}').status_code
-    if not user_info.get('users'):
-        return abort(status_code)
-    return render_template('users_show.html', user=user_info['users'][0])
+    user_info = get(f'http://localhost:8080/api/users_show/{user_id}')
+    if not user_info:
+        error_img = url_for('static', filename='img/error_img.png')
+        return render_template('users_show.html', user={"name": current_user.name, "surname":current_user.surname},
+                               img_link=error_img)
+
+    img_link = url_for('static', filename='img/map.png')
+    return render_template('users_show.html', user=user_info.json()['users'][0], img_link=img_link)
 
 
 @app.route('/logout')

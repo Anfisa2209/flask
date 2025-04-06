@@ -4,10 +4,10 @@
 <meta charset="utf-8">
      <h1>Nostalgia</h1>
      <h1>{{user["name"]}} {{user["surname"]}}</h1>
-     <h3>Hometown {{user["city_from"]}}</h3>
+     <h3>Hometown {{user["city_from"]}} {% if user["city_from"]%} {% else%} К сожалению, произошла ошибка, но вы где-то здесь {%endif%}</h3>
      <br>
      <div class="d-flex justify-content-center">
-          <img src="/static/img/map.png" alt="Родной город {{user['name']}} {{user['surname']}}">
+          <img src="{{img_link}}" alt="Родной город {{user['name']}} {{user['surname']}}" style="width: 400px; height:auto;">
        </div>
 
 {% endblock %}
